@@ -1,0 +1,137 @@
+/* ===== Dashboard ===== */
+.dash {
+  min-height: 100vh;
+  padding: 18px 18px 40px;
+  overflow: auto;
+  background: radial-gradient(ellipse at 50% 10%, rgba(214, 228, 255, 0.35) 0%, transparent 70%);
+}
+
+.dash-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dash-title {
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  font-weight: 900;
+  text-align: center;
+}
+
+.dash-top-spacer {
+  height: 1px;
+}
+
+.dash-card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 16px 16px;
+  margin-bottom: 14px;
+}
+
+.dash-card-title {
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.dash-insight {
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 840px) {
+  .dash-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dash-big {
+  font-size: 2.2rem;
+  font-weight: 900;
+}
+
+.dash-muted {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.dash-list {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.dash-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 800;
+}
+
+.dash-letters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+  gap: 10px;
+}
+
+.dash-letter {
+  border-radius: 16px;
+  padding: 10px 10px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.dash-letter-char {
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dash-letter-pct {
+  margin-top: 4px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.dash-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dash-subtitle {
+  font-weight: 900;
+  min-width: 110px;
+}
+
+.dash-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.dash-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(26, 79, 160, 0.12);
+  border: 2px solid rgba(26, 79, 160, 0.18);
+  font-weight: 900;
+}
+
+.dash-chip-weak {
+  background: rgba(160, 32, 32, 0.10);
+  border-color: rgba(160, 32, 32, 0.18);
+}
+

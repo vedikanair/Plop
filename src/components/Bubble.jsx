@@ -1,8 +1,18 @@
 import React from 'react';
-import { LETTER_COLORS, LETTER_BG_COLORS } from '../utils/letters.js';
 import './Bubble.css';
 
-function Bubble({ id, letter, left, floatDuration, isPopping, onPop, onMissed, onRemove }) {
+function Bubble({
+  id,
+  letter,
+  colors,
+  left,
+  floatDuration,
+  isPopping,
+  isWrong,
+  onPop,
+  onMissed,
+  onRemove,
+}) {
   const handlePointerDown = (e) => {
     e.stopPropagation();
     onPop(id);
@@ -26,13 +36,13 @@ function Bubble({ id, letter, left, floatDuration, isPopping, onPop, onMissed, o
 
   return (
     <div
-      className={`bubble${isPopping ? ' is-popping' : ''}`}
+      className={`bubble${isPopping ? ' is-popping' : ''}${isWrong ? ' is-wrong' : ''}`}
       style={{
         left: `${left}%`,
         '--float-duration': `${floatDuration}s`,
-        backgroundColor: LETTER_BG_COLORS[letter],
-        color: LETTER_COLORS[letter],
-        borderColor: LETTER_COLORS[letter],
+        backgroundColor: colors?.bg,
+        color: colors?.fg,
+        borderColor: colors?.border ?? colors?.fg,
       }}
       tabIndex={0}
       role="button"
@@ -41,7 +51,7 @@ function Bubble({ id, letter, left, floatDuration, isPopping, onPop, onMissed, o
       onKeyDown={handleKeyDown}
       onAnimationEnd={handleAnimationEnd}
     >
-      {letter}
+      <div className="bubble-inner">{letter}</div>
     </div>
   );
 }

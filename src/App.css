@@ -68,6 +68,31 @@ body {
   transform: scale(0.97);
 }
 
+/* ===== Secondary button ===== */
+.btn-secondary {
+  font-family: var(--font-main);
+  min-height: 48px;
+  min-width: 140px;
+  padding: 12px 28px;
+  border-radius: var(--radius-btn);
+  border: 2px solid rgba(26, 79, 160, 0.25);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-text);
+  font-size: clamp(1rem, 2.8vw, 1.2rem);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-secondary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce) {
   *,

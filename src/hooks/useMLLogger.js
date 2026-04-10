@@ -1,130 +1,141 @@
 import { useRef, useCallback } from 'react';
-import { LETTERS } from '../utils/letters.js';
+import { ALL_LETTERS } from '../utils/letters.js';
 import { saveMLSession } from '../utils/storage.js';
+import { computeAnalytics } from '../analytics/computeAnalytics.js';
+import { addInteractionEvents, createSession, finalizeSession } from '../storage/eventsStore.js';
 
-function generateTip(weakestPair) {
-  if (!weakestPair || weakestPair.length < 2) {
-    return 'Incredible! You popped every bubble perfectly! 🎉';
-  }
-  const sorted = [...weakestPair].sort().join('');
-  switch (sorted) {
-    case 'bd':
-      return "You're so close! b faces right, d faces left. You've got this! 🌟";
-    case 'bp':
-      return "Almost there! b sits on the line, p drops its tail below. Keep it up! 🌟";
-    case 'bq':
-      return "Great effort! b faces right with a tall back, q faces left with a tail. You're a star! ⭐";
-    case 'dp':
-      return "So close! d faces left on the line, p drops its tail below. You can do it! 🌟";
-    case 'dq':
-      return "Nearly there! d has a tall back on the left, q drops its tail below-left. Keep going! ⭐";
-    case 'pq':
-      return "Nearly there! p has its tail going down-right, q goes down-left. Keep going! ⭐";
-    default:
-      return "Great job practising! Keep playing to get even better! 🌟";
-  }
+function safeUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return `sess_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+}
+
+function tipFromConfusions({ targetLetter, confusedWith }) {
+  if (!targetLetter) return 'Great job. Keep playing to get even better!';
+  if (!confusedWith || confusedWith.length === 0) return `Great job with "${targetLetter}"!`;
+  const top = confusedWith.slice(0, 2).join(' and ');
+  return `You often confuse "${targetLetter}" with ${top}. Keep practising — you're improving!`;
+}
+
+function normalizeForStorage(ev, sessionId) {
+  const ts = ev.timestamp ?? ev.ts ?? Date.now();
+  const targetLetter = ev.targetLetter ?? null;
+  const clickedLetter = ev.clickedLetter ?? ev.tappedLetter ?? null;
+
+  const kind = ev.kind ?? (ev.type === 'miss' ? 'miss' : 'pop');
+  const correct =
+    typeof ev.correct === 'boolean'
+      ? ev.correct
+      : ev.type === 'correct_pop'
+        ? true
+        : ev.type === 'wrong_pop'
+          ? false
+          : null;
+
+  return {
+    sessionId,
+    ts,
+    kind,
+    targetLetter,
+    clickedLetter,
+    correct,
+    reactionMs: typeof ev.reactionMs === 'number' ? ev.reactionMs : null,
+    // Optional context (kept if present)
+    timeRemaining: typeof ev.timeRemaining === 'number' ? ev.timeRemaining : null,
+    difficultyLevel: typeof ev.difficultyLevel === 'number' ? ev.difficultyLevel : null,
+    sessionMs: typeof ev.sessionMs === 'number' ? ev.sessionMs : null,
+  };
 }
 
 export function useMLLogger() {
   const eventsRef = useRef([]);
+  const sessionIdRef = useRef(null);
+  const sessionMetaRef = useRef(null);
 
   const resetLog = useCallback(() => {
     eventsRef.current = [];
+    sessionIdRef.current = null;
+  }, []);
+
+  const beginSession = useCallback(({ startedAt, durationSec, targetLetter }) => {
+    const sessionId = safeUUID();
+    eventsRef.current = [];
+    sessionIdRef.current = sessionId;
+    sessionMetaRef.current = { startedAt, durationSec, targetLetter };
+
+    // Fire-and-forget: keep gameplay synchronous.
+    void createSession({
+      sessionId,
+      startedAt,
+      durationSec,
+      targetLetter,
+    }).catch(() => {});
+
+    return sessionId;
   }, []);
 
   const logMLEvent = useCallback((event) => {
-    eventsRef.current.push(event);
+    const sessionId = sessionIdRef.current ?? 'unknown';
+    eventsRef.current.push(normalizeForStorage(event, sessionId));
   }, []);
 
   const analyzeSession = useCallback((targetLetter) => {
-    const events = eventsRef.current;
+    const all = eventsRef.current;
+    const filtered = targetLetter ? all.filter((e) => e?.targetLetter === targetLetter) : all;
+    const analysis = computeAnalytics({ letters: ALL_LETTERS, events: filtered });
 
-    // Build confusion matrix
-    const confusionMatrix = {};
-    LETTERS.forEach((a) => {
-      confusionMatrix[a] = {};
-      LETTERS.forEach((b) => {
-        confusionMatrix[a][b] = 0;
-      });
-    });
+    const row = analysis.confusionMatrix?.[targetLetter] ?? null;
+    const confusedWith = row
+      ? Object.entries(row)
+          .filter(([l, count]) => l !== targetLetter && (count || 0) > 0)
+          .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+          .map(([l]) => l)
+      : [];
 
-    // Track accuracy per letter
-    const letterStats = {};
-    LETTERS.forEach((l) => {
-      letterStats[l] = { correct: 0, total: 0 };
-    });
-
-    let totalReactionMs = 0;
-    let reactionCount = 0;
-
-    events.forEach((ev) => {
-      if (ev.type === 'correct_pop') {
-        confusionMatrix[ev.targetLetter][ev.tappedLetter] += 1;
-        letterStats[ev.tappedLetter].correct += 1;
-        letterStats[ev.tappedLetter].total += 1;
-        if (ev.reactionMs != null) {
-          totalReactionMs += ev.reactionMs;
-          reactionCount += 1;
-        }
-      } else if (ev.type === 'wrong_pop') {
-        // Player tapped the wrong letter — record confusion
-        confusionMatrix[ev.targetLetter][ev.tappedLetter] += 1;
-        letterStats[ev.tappedLetter].total += 1;
-        if (ev.reactionMs != null) {
-          totalReactionMs += ev.reactionMs;
-          reactionCount += 1;
-        }
-      } else if (ev.type === 'miss') {
-        letterStats[ev.tappedLetter].total += 1;
-      }
-    });
-
-    // Accuracy per letter
-    const accuracy = {};
-    LETTERS.forEach((l) => {
-      const s = letterStats[l];
-      accuracy[l] = s.total > 0 ? s.correct / s.total : 1.0;
-    });
-
-    // Find weakest pair from confusion matrix (off-diagonal)
-    let maxConfusion = 0;
-    let weakestPair = null;
-    LETTERS.forEach((a) => {
-      LETTERS.forEach((b) => {
-        if (a !== b) {
-          const count = confusionMatrix[a][b] + confusionMatrix[b][a];
-          if (count > maxConfusion) {
-            maxConfusion = count;
-            weakestPair = [a, b];
-          }
-        }
-      });
-    });
-
-    const avgReactionMs =
-      reactionCount > 0 ? Math.round(totalReactionMs / reactionCount) : 0;
-
-    const tip = generateTip(weakestPair);
+    const tip = tipFromConfusions({ targetLetter, confusedWith });
+    const targetAccuracy =
+      typeof targetLetter === 'string' ? analysis.accuracy?.[targetLetter] ?? 1 : null;
 
     return {
-      accuracy,
-      confusionMatrix,
-      weakestPair,
-      avgReactionMs,
-      tip,
-    };
-  }, []);
-
-  const saveSession = useCallback((targetLetter, score, analysis) => {
-    const sessionRecord = {
-      timestamp: Date.now(),
       targetLetter,
-      score,
-      events: eventsRef.current,
-      analysis,
+      targetAccuracy,
+      confusedWith: confusedWith.slice(0, 5),
+      confusionCounts: row,
+      tip,
+      // Keep full analysis so we can persist it and reuse it later if needed.
+      full: analysis,
     };
-    saveMLSession(sessionRecord);
   }, []);
 
-  return { logMLEvent, analyzeSession, saveSession, resetLog };
+  const endSession = useCallback(async ({ endedAt, score, analysis }) => {
+    const sessionId = sessionIdRef.current;
+    if (!sessionId) return;
+
+    const events = eventsRef.current;
+    try {
+      await addInteractionEvents(events);
+
+      await finalizeSession({
+        sessionId,
+        endedAt,
+        score,
+        analysis,
+        eventCount: events.length,
+      });
+    } catch {
+      // IndexedDB might be unavailable; fail silently.
+    }
+
+    // Back-compat history (small; last 50)
+    const meta = sessionMetaRef.current;
+    saveMLSession({
+      timestamp: endedAt,
+      sessionId,
+      targetLetter: meta?.targetLetter ?? null,
+      score,
+      events,
+      analysis,
+    });
+  }, []);
+
+  return { beginSession, logMLEvent, analyzeSession, endSession, resetLog };
 }
