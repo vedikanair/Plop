@@ -2,7 +2,7 @@
 .game-shell {
   min-height: 100vh;
   padding: 16px;
-  background: radial-gradient(ellipse at 50% 20%, rgba(214, 228, 255, 0.35) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 20%, rgba(180, 205, 237, 0.35) 0%, transparent 70%);
 }
 
 .game-bento {
@@ -34,10 +34,10 @@
 }
 
 .game-card {
-  background: rgba(255, 255, 255, 0.80);
-  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: #344966;
+  border: 2px solid rgba(180, 205, 237, 0.40);
   border-radius: 22px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(13, 24, 33, 0.12);
   overflow: hidden;
 }
 
@@ -61,7 +61,7 @@
 
 .controls-label {
   font-weight: 900;
-  color: var(--color-muted);
+  color: #F0F4EF;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-size: 0.85rem;
@@ -70,10 +70,11 @@
 .controls-target {
   font-size: 2.2rem;
   font-weight: 900;
-  background: rgba(26, 79, 160, 0.10);
-  border: 2px solid rgba(26, 79, 160, 0.18);
+  background: rgba(180, 205, 237, 0.22);
+  border: 2px solid rgba(180, 205, 237, 0.55);
   padding: 6px 12px;
   border-radius: 16px;
+  color: #F0F4EF;
 }
 
 .game-card-area {
@@ -96,18 +97,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(248, 246, 240, 0.75);
+  background: rgba(240, 244, 239, 0.75);
   backdrop-filter: blur(8px);
 }
 
 .nextlevel-card {
   width: min(420px, 92%);
-  background: rgba(255, 255, 255, 0.92);
-  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: #344966;
+  border: 2px solid rgba(180, 205, 237, 0.55);
   border-radius: 24px;
   padding: 20px 18px;
   text-align: center;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 18px 45px rgba(13, 24, 33, 0.22);
+  color: #F0F4EF;
 }
 
 .nextlevel-title {
@@ -118,6 +120,20 @@
 .nextlevel-sub {
   margin-top: 8px;
   margin-bottom: 16px;
-  color: var(--color-muted);
+  color: rgba(240, 244, 239, 0.85);
   font-weight: 700;
+}
+
+.nextlevel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (min-width: 520px) {
+  .nextlevel-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
 }

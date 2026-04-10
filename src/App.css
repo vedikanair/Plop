@@ -8,10 +8,10 @@
   --color-p-text:   #5C1F8A;
   --color-q-bg:     #FFD6D6;
   --color-q-text:   #A02020;
-  --color-page-bg:  #F8F6F0;
-  --color-primary:  #1A4FA0;
-  --color-text:     #1A1A1A;
-  --color-muted:    #757575;
+  --color-page-bg:  #F0F4EF;
+  --color-primary:  #344966;
+  --color-text:     #0D1821;
+  --color-muted:    #344966;
   --radius-btn:     32px;
   --radius-bubble:  50%;
   --font-main:      'OpenDyslexic', Arial, 'Comic Sans MS', sans-serif;
@@ -50,7 +50,7 @@ body {
   border: none;
   border-radius: var(--radius-btn);
   background: var(--color-primary);
-  color: #fff;
+  color: #F0F4EF;
   font-size: clamp(1.1rem, 3vw, 1.4rem);
   font-weight: 700;
   cursor: pointer;
@@ -75,8 +75,8 @@ body {
   min-width: 140px;
   padding: 12px 28px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(26, 79, 160, 0.25);
-  background: rgba(255, 255, 255, 0.75);
+  border: 2px solid rgba(180, 205, 237, 0.75);
+  background: rgba(52, 73, 102, 0.12);
   color: var(--color-text);
   font-size: clamp(1rem, 2.8vw, 1.2rem);
   font-weight: 800;

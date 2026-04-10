@@ -10,7 +10,7 @@
   gap: 24px;
   background: radial-gradient(
     ellipse at 50% 40%,
-    rgba(214, 228, 255, 0.45) 0%,
+    rgba(180, 205, 237, 0.45) 0%,
     transparent 70%
   );
 }
@@ -21,7 +21,7 @@
   color: var(--color-primary);
   line-height: 1.1;
   letter-spacing: -0.02em;
-  text-shadow: 0 4px 24px rgba(26, 79, 160, 0.15);
+  text-shadow: 0 4px 24px rgba(52, 73, 102, 0.15);
 }
 
 .start-tagline {
@@ -36,7 +36,7 @@
   margin-top: 12px;
   font-size: clamp(1.2rem, 4vw, 1.6rem);
   padding: 16px 48px;
-  box-shadow: 0 8px 28px rgba(26, 79, 160, 0.25);
+  box-shadow: 0 8px 28px rgba(52, 73, 102, 0.25);
 }
 
 /* Settings */
@@ -47,8 +47,8 @@
   width: min(520px, 100%);
   padding: 14px 14px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 2px solid rgba(26, 79, 160, 0.15);
+  background: rgba(240, 244, 239, 0.75);
+  border: 2px solid rgba(180, 205, 237, 0.65);
   backdrop-filter: blur(8px);
 }
 
@@ -69,8 +69,8 @@
 }
 
 .start-letter-btn.is-active {
-  border-color: rgba(26, 79, 160, 0.45);
-  box-shadow: 0 8px 20px rgba(26, 79, 160, 0.18);
+  border-color: rgba(180, 205, 237, 0.95);
+  box-shadow: 0 8px 20px rgba(52, 73, 102, 0.18);
 }
 
 .start-setting {
@@ -107,7 +107,7 @@
 .start-segment-btn.is-active {
   background: white;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  border: 2px solid rgba(26, 79, 160, 0.2);
+  border: 2px solid rgba(180, 205, 237, 0.85);
 }
 
 .start-toggle {
@@ -144,7 +144,7 @@
 }
 
 .start-toggle input:checked + .start-toggle-ui {
-  background: rgba(26, 79, 160, 0.45);
+  background: rgba(180, 205, 237, 0.95);
 }
 
 .start-toggle input:checked + .start-toggle-ui::after {

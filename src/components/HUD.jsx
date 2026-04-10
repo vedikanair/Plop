@@ -2,6 +2,8 @@ import React from 'react';
 import './HUD.css';
 
 function HUD({
+  timeLeft,
+  totalDurationSec,
   targetLetter,
   score,
   scoreBounce,
@@ -10,9 +12,10 @@ function HUD({
   lettersThisLevel,
   onRepeat,
 }) {
-  const denom = typeof lettersThisLevel === 'number' && lettersThisLevel > 0 ? lettersThisLevel : 1;
-  const remaining = Math.max(0, denom - (lettersSpawned || 0));
-  const progress = Math.max(0, Math.min(1, remaining / denom));
+  const denom =
+    typeof totalDurationSec === 'number' && totalDurationSec > 0 ? totalDurationSec : 1;
+  const progress = Math.max(0, Math.min(1, (timeLeft || 0) / denom));
+  const remaining = Math.max(0, timeLeft || 0);
 
   return (
     <div className="hud">
@@ -29,6 +32,8 @@ function HUD({
         <span className="hud-value" aria-live="polite">
           {level}
         </span>
+        <span className="hud-label" style={{ marginTop: 8 }}>Time</span>
+        <span className="hud-value">{remaining}</span>
       </div>
 
       {/* Instruction */}
@@ -54,8 +59,8 @@ function HUD({
 
       {/* Score */}
       <div className="hud-score" aria-live="polite">
-        <span className="hud-label">Remaining</span>
-        <span className="hud-value">{remaining}</span>
+        <span className="hud-label">Bubbles</span>
+        <span className="hud-value">{lettersSpawned || 0}</span>
         <span className="hud-label" style={{ marginTop: 8 }}>Score</span>
         <span className={`hud-value${scoreBounce ? ' score-bounce' : ''}`}>
           {score}

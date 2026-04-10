@@ -5,6 +5,8 @@ import LevelUpBanner from './LevelUpBanner.jsx';
 import './GameScreen.css';
 
 function GameScreen({
+  timeLeft,
+  totalDurationSec,
   targetLetter,
   score,
   scoreBounce,
@@ -16,6 +18,7 @@ function GameScreen({
   lettersThisLevel,
   isBetweenLevels,
   onNextLevel,
+  onGoDashboard,
   onBubblePop,
   onBubbleMissed,
   onRepeat,
@@ -25,6 +28,8 @@ function GameScreen({
       <div className="game-bento">
         <div className="game-card game-card-hud">
           <HUD
+            timeLeft={timeLeft}
+            totalDurationSec={totalDurationSec}
             targetLetter={targetLetter}
             score={score}
             scoreBounce={scoreBounce}
@@ -72,9 +77,14 @@ function GameScreen({
                 <div className="nextlevel-sub">
                   Level {level + 1} will be faster.
                 </div>
-                <button className="btn-primary" type="button" onClick={onNextLevel}>
-                  Continue
-                </button>
+                <div className="nextlevel-actions">
+                  <button className="btn-primary" type="button" onClick={onNextLevel}>
+                    Next Level
+                  </button>
+                  <button className="btn-secondary" type="button" onClick={() => onGoDashboard?.()}>
+                    Go to Dashboard
+                  </button>
+                </div>
               </div>
             </div>
           )}

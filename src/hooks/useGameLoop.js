@@ -37,17 +37,12 @@ const CONFUSION_PAIRS = {
   t: 'f',
 };
 
-function levelLettersTarget(level) {
-  const base = 50 + Math.min(20, Math.floor(level * 2));
-  const jitter = Math.floor(Math.random() * 21);
-  return Math.min(70, base + jitter);
-}
-
 function difficultyForLevel(level) {
-  const speedMul = 1 + (level - 1) * 0.18;
-  const floatDuration = Math.max(1.4, 3.0 / speedMul);
-  const spawnInterval = Math.max(180, 520 / speedMul);
-  const bubblesOnScreen = Math.min(16, 7 + Math.floor(level / 2));
+  // Restore original baseline speed at level 1, then scale smoothly.
+  // (Lower floatDuration => faster bubbles)
+  const floatDuration = Math.max(2.5, 6 - (level - 1) * 0.35);
+  const spawnInterval = Math.max(420, 1200 - (level - 1) * 90);
+  const bubblesOnScreen = Math.min(12, 4 + Math.floor((level - 1) / 1));
   return { floatDuration, spawnInterval, bubblesOnScreen };
 }
 
@@ -90,7 +85,7 @@ export function useGameLoop({
   const [isNewHighScore, setIsNewHighScore] = useState(false);
   const [level, setLevel] = useState(1);
   const [lettersSpawned, setLettersSpawned] = useState(0);
-  const [lettersThisLevel, setLettersThisLevel] = useState(() => levelLettersTarget(1));
+  const [lettersThisLevel, setLettersThisLevel] = useState(0);
   const [isBetweenLevels, setIsBetweenLevels] = useState(false);
 
   const timerRef = useRef(null);
@@ -248,6 +243,20 @@ export function useGameLoop({
     setScreen('gameover');
   }, [playGameOverSound, analyzeSession, endSession]);
 
+  const stopToStart = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (spawnRef.current) clearInterval(spawnRef.current);
+    timerRef.current = null;
+    spawnRef.current = null;
+    isRunningRef.current = false;
+    setIsRunning(false);
+    setIsBetweenLevels(false);
+    isBetweenLevelsRef.current = false;
+    setActiveBubbles([]);
+    activeBubblesRef.current = [];
+    setScreen('start');
+  }, []);
+
   const endGameRef = useRef(endGame);
   useEffect(() => {
     endGameRef.current = endGame;
@@ -260,7 +269,7 @@ export function useGameLoop({
       if (isBetweenLevelsRef.current) return;
       const current = activeBubblesRef.current;
       if (current.length >= difficultyRef.current.bubblesOnScreen) return;
-      if (lettersSpawnedRef.current >= lettersThisLevelRef.current) return;
+      // Timer-driven levels: no per-level quota.
 
       const nextLetter =
         pickBubbleLetter({
@@ -286,8 +295,6 @@ export function useGameLoop({
       setActiveBubbles(next);
 
       lastSpawnedLetterRef.current = nextLetter;
-      lettersSpawnedRef.current += 1;
-      setLettersSpawned(lettersSpawnedRef.current);
     }, interval);
   }, []);
 
@@ -335,15 +342,7 @@ export function useGameLoop({
       setTimeout(() => setScoreBounce(false), 200);
       checkLevelUp(newScore);
 
-      if (
-        lettersSpawnedRef.current >= lettersThisLevelRef.current &&
-        activeBubblesRef.current.filter((b) => b.id !== bubbleId).length === 0
-      ) {
-        setIsBetweenLevels(true);
-        isBetweenLevelsRef.current = true;
-        if (spawnRef.current) clearInterval(spawnRef.current);
-        spawnRef.current = null;
-      }
+      // Level completion is timer-driven (handled by the per-level timer).
     } else {
       // Wrong click feedback: shake + red tint, but do not remove the bubble.
       const updated = current.map((b) =>
@@ -400,15 +399,7 @@ export function useGameLoop({
     activeBubblesRef.current = c;
     setActiveBubbles(c);
 
-    if (
-      lettersSpawnedRef.current >= lettersThisLevelRef.current &&
-      activeBubblesRef.current.length === 0
-    ) {
-      setIsBetweenLevels(true);
-      isBetweenLevelsRef.current = true;
-      if (spawnRef.current) clearInterval(spawnRef.current);
-      spawnRef.current = null;
-    }
+    // Level completion is timer-driven (handled by the per-level timer).
   }, [logMLEvent]);
 
   const startGame = useCallback(() => {
@@ -430,9 +421,8 @@ export function useGameLoop({
     levelRef.current = 1;
     setLettersSpawned(0);
     lettersSpawnedRef.current = 0;
-    const lt = levelLettersTarget(1);
-    setLettersThisLevel(lt);
-    lettersThisLevelRef.current = lt;
+    setLettersThisLevel(0);
+    lettersThisLevelRef.current = 0;
     setIsBetweenLevels(false);
     isBetweenLevelsRef.current = false;
     scoreRef.current = 0;
@@ -464,6 +454,25 @@ export function useGameLoop({
     // Speak instruction
     speakInstruction(target);
 
+    // Start timer (per-level, consistent duration)
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      const newTime = timeLeftRef.current - 1;
+      timeLeftRef.current = newTime;
+      setTimeLeft(newTime);
+      if (newTime <= 0) {
+        // End level: pause & show transition.
+        if (spawnRef.current) clearInterval(spawnRef.current);
+        spawnRef.current = null;
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = null;
+        setActiveBubbles([]);
+        activeBubblesRef.current = [];
+        setIsBetweenLevels(true);
+        isBetweenLevelsRef.current = true;
+      }
+    }, 1000);
+
     // Start spawner
     startSpawner(diff.spawnInterval);
   }, [speakInstruction, startSpawner, resetLog, beginSession, practiceMode, practiceLetter]);
@@ -475,16 +484,37 @@ export function useGameLoop({
 
     setLettersSpawned(0);
     lettersSpawnedRef.current = 0;
-    const lt = levelLettersTarget(next);
-    setLettersThisLevel(lt);
-    lettersThisLevelRef.current = lt;
+    setLettersThisLevel(0);
+    lettersThisLevelRef.current = 0;
 
     setIsBetweenLevels(false);
     isBetweenLevelsRef.current = false;
 
+    // Reset timer cleanly for the new level using the original selected duration.
+    const durationSec = totalDurationRef.current;
+    timeLeftRef.current = durationSec;
+    setTimeLeft(durationSec);
+
     const diff = difficultyForLevel(next);
     difficultyRef.current = diff;
     startSpawner(diff.spawnInterval);
+
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      const newTime = timeLeftRef.current - 1;
+      timeLeftRef.current = newTime;
+      setTimeLeft(newTime);
+      if (newTime <= 0) {
+        if (spawnRef.current) clearInterval(spawnRef.current);
+        spawnRef.current = null;
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = null;
+        setActiveBubbles([]);
+        activeBubblesRef.current = [];
+        setIsBetweenLevels(true);
+        isBetweenLevelsRef.current = true;
+      }
+    }, 1000);
   }, [startSpawner]);
 
   // Cleanup on unmount
@@ -515,6 +545,7 @@ export function useGameLoop({
     isBetweenLevels,
     startGame,
     nextLevel,
+    stopToStart,
     handleBubblePop,
     handleBubbleMissed,
     speakInstruction,
