@@ -1,0 +1,80 @@
+/* ===== Global CSS Variables ===== */
+:root {
+  --color-b-bg:     #D6E4FF;
+  --color-b-text:   #1A4FA0;
+  --color-d-bg:     #D6F0E0;
+  --color-d-text:   #1A6B3A;
+  --color-p-bg:     #EDD6FF;
+  --color-p-text:   #5C1F8A;
+  --color-q-bg:     #FFD6D6;
+  --color-q-text:   #A02020;
+  --color-page-bg:  #F8F6F0;
+  --color-primary:  #1A4FA0;
+  --color-text:     #1A1A1A;
+  --color-muted:    #757575;
+  --radius-btn:     32px;
+  --radius-bubble:  50%;
+  --font-main:      'OpenDyslexic', Arial, 'Comic Sans MS', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--color-page-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ===== Focus styles (accessibility) ===== */
+*:focus-visible {
+  outline: 3px solid #FFD700;
+  outline-offset: 3px;
+}
+
+/* ===== Shared button base ===== */
+.btn-primary {
+  font-family: var(--font-main);
+  min-height: 56px;
+  min-width: 140px;
+  padding: 14px 36px;
+  border: none;
+  border-radius: var(--radius-btn);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(26, 79, 160, 0.35);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

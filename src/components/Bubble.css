@@ -1,0 +1,83 @@
+/* ===== Bubble ===== */
+.bubble {
+  position: absolute;
+  bottom: -80px;
+  min-width: 64px;
+  min-height: 64px;
+  width: clamp(64px, 14vw, 96px);
+  height: clamp(64px, 14vw, 96px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-main);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: bold;
+  border: 3px solid;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  pointer-events: all;
+  animation: floatUp var(--float-duration, 6s) linear forwards;
+  will-change: transform;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10),
+              inset 0 -6px 12px rgba(255, 255, 255, 0.35),
+              inset 0 6px 12px rgba(255, 255, 255, 0.20);
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 14%;
+  left: 22%;
+  width: 28%;
+  height: 22%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.bubble:hover {
+  filter: brightness(1.06);
+}
+
+.bubble.is-popping {
+  animation: popBurst 0.2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ===== Keyframes ===== */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+  8% {
+    transform: translateY(-5vh) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-110vh) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popBurst {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(1.5);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,107 @@
+/* ===== Game Over Screen ===== */
+.gameover-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px 24px;
+  text-align: center;
+  gap: 18px;
+}
+
+.gameover-heading {
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: 900;
+  color: var(--color-text);
+  line-height: 1.15;
+}
+
+.gameover-score-line {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.gameover-score-line .target-letter-display {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+/* High score banner */
+.gameover-highscore-banner {
+  display: inline-block;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #FFE066, #FFD700);
+  border-radius: 16px;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: #1A1A1A;
+  box-shadow: 0 4px 16px rgba(255, 199, 0, 0.35);
+  animation: scoreBounce 0.4s ease-out;
+}
+
+.gameover-best {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: var(--color-muted);
+}
+
+/* ML Summary Card */
+.ml-summary {
+  width: 100%;
+  max-width: 400px;
+  background: #F8F6F0;
+  border: 2px solid #E0E0E0;
+  border-radius: 20px;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.ml-tip {
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.ml-accuracy-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ml-accuracy-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.ml-accuracy-letter {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  line-height: 1;
+}
+
+.ml-accuracy-pct {
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  color: var(--color-muted);
+  margin-top: 2px;
+}
+
+.gameover-play-btn {
+  margin-top: 8px;
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+  padding: 14px 40px;
+  box-shadow: 0 6px 24px rgba(26, 79, 160, 0.25);
+}
+
+@keyframes scoreBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}

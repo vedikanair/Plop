@@ -1,0 +1,40 @@
+/* ===== LevelUpBanner ===== */
+.level-up-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #FFE066 0%, #FFD700 50%, #FFC700 100%);
+  color: #1A1A1A;
+  font-family: var(--font-main);
+  font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(255, 199, 0, 0.45);
+  animation: levelUpSlide 1.5s ease-in-out forwards;
+  pointer-events: none;
+}
+
+@keyframes levelUpSlide {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}

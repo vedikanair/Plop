@@ -1,0 +1,94 @@
+/* ===== Start Screen ===== */
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px 24px;
+  text-align: center;
+  gap: 24px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(214, 228, 255, 0.45) 0%,
+    transparent 70%
+  );
+}
+
+.start-title {
+  font-size: clamp(3.5rem, 12vw, 6rem);
+  font-weight: 900;
+  color: var(--color-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 24px rgba(26, 79, 160, 0.15);
+}
+
+.start-tagline {
+  font-size: clamp(1rem, 3.5vw, 1.4rem);
+  color: var(--color-muted);
+  font-style: italic;
+  max-width: 340px;
+  line-height: 1.4;
+}
+
+.start-play-btn {
+  margin-top: 12px;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  padding: 16px 48px;
+  box-shadow: 0 8px 28px rgba(26, 79, 160, 0.25);
+}
+
+/* Decorative bubbles */
+.start-deco {
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.start-deco-1 {
+  width: 120px;
+  height: 120px;
+  background: var(--color-b-bg);
+  border: 3px solid var(--color-b-text);
+  top: 10%;
+  left: 8%;
+  animation: decoFloat 8s ease-in-out infinite alternate;
+}
+
+.start-deco-2 {
+  width: 80px;
+  height: 80px;
+  background: var(--color-d-bg);
+  border: 3px solid var(--color-d-text);
+  top: 20%;
+  right: 10%;
+  animation: decoFloat 6s ease-in-out 1s infinite alternate;
+}
+
+.start-deco-3 {
+  width: 100px;
+  height: 100px;
+  background: var(--color-p-bg);
+  border: 3px solid var(--color-p-text);
+  bottom: 15%;
+  left: 15%;
+  animation: decoFloat 7s ease-in-out 0.5s infinite alternate;
+}
+
+.start-deco-4 {
+  width: 64px;
+  height: 64px;
+  background: var(--color-q-bg);
+  border: 3px solid var(--color-q-text);
+  bottom: 25%;
+  right: 12%;
+  animation: decoFloat 5s ease-in-out 1.5s infinite alternate;
+}
+
+@keyframes decoFloat {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-30px) rotate(8deg); }
+}

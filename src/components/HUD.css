@@ -1,0 +1,115 @@
+/* ===== HUD ===== */
+.hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(248, 246, 240, 0.97) 0%,
+    rgba(248, 246, 240, 0.85) 80%,
+    rgba(248, 246, 240, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.hud > * {
+  pointer-events: all;
+}
+
+/* --- Timer --- */
+.hud-timer,
+.hud-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 72px;
+}
+
+.hud-label {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.hud-value {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.hud-value.timer-danger {
+  color: var(--color-q-text);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* --- Instruction --- */
+.hud-instruction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  padding: 0 8px;
+}
+
+.hud-instruction-text {
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.hud-target-letter {
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+  font-size: 1.15em;
+}
+
+.hud-repeat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  background: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: transform 0.15s ease, background 0.15s ease;
+  touch-action: manipulation;
+}
+
+.hud-repeat-btn:hover {
+  background: var(--color-b-bg);
+  transform: scale(1.1);
+}
+
+/* --- Score bounce --- */
+.hud-value.score-bounce {
+  animation: scoreBounce 0.2s ease-out;
+}
+
+/* ===== Keyframes ===== */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes scoreBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
