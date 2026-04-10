@@ -39,6 +39,118 @@
   box-shadow: 0 8px 28px rgba(26, 79, 160, 0.25);
 }
 
+/* Settings */
+.start-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(520px, 100%);
+  padding: 14px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(26, 79, 160, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.start-letter-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+  gap: 8px;
+}
+
+.start-letter-btn {
+  border: 2px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 14px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.start-letter-btn.is-active {
+  border-color: rgba(26, 79, 160, 0.45);
+  box-shadow: 0 8px 20px rgba(26, 79, 160, 0.18);
+}
+
+.start-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.start-setting-label {
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.start-segment {
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 4px;
+  gap: 6px;
+}
+
+.start-segment-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 900;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text);
+  min-width: 72px;
+}
+
+.start-segment-btn.is-active {
+  background: white;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(26, 79, 160, 0.2);
+}
+
+.start-toggle {
+  cursor: pointer;
+  position: relative;
+}
+
+.start-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.start-toggle-ui {
+  width: 54px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.14);
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.start-toggle-ui::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: white;
+  transition: transform 0.18s ease, background 0.18s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.start-toggle input:checked + .start-toggle-ui {
+  background: rgba(26, 79, 160, 0.45);
+}
+
+.start-toggle input:checked + .start-toggle-ui::after {
+  transform: translateX(22px);
+}
+
 /* Decorative bubbles */
 .start-deco {
   position: fixed;

@@ -1,20 +1,33 @@
 import React from 'react';
-import { LETTER_COLORS } from '../utils/letters.js';
 import './HUD.css';
 
-function HUD({ timeLeft, targetLetter, score, scoreBounce, onRepeat }) {
-  const timerDanger = timeLeft <= 10;
+function HUD({
+  targetLetter,
+  score,
+  scoreBounce,
+  level,
+  lettersSpawned,
+  lettersThisLevel,
+  onRepeat,
+}) {
+  const denom = typeof lettersThisLevel === 'number' && lettersThisLevel > 0 ? lettersThisLevel : 1;
+  const remaining = Math.max(0, denom - (lettersSpawned || 0));
+  const progress = Math.max(0, Math.min(1, remaining / denom));
 
   return (
     <div className="hud">
+      <div className="hud-progress" aria-hidden="true">
+        <div
+          className="hud-progress-bar"
+          style={{ transform: `scaleX(${progress})` }}
+        />
+      </div>
+
       {/* Timer */}
       <div className="hud-timer">
-        <span className="hud-label">Time</span>
-        <span
-          className={`hud-value${timerDanger ? ' timer-danger' : ''}`}
-          aria-live="off"
-        >
-          {timeLeft}
+        <span className="hud-label">Level</span>
+        <span className="hud-value" aria-live="polite">
+          {level}
         </span>
       </div>
 
@@ -24,7 +37,6 @@ function HUD({ timeLeft, targetLetter, score, scoreBounce, onRepeat }) {
           Pop all the{' '}
           <span
             className="hud-target-letter"
-            style={{ color: LETTER_COLORS[targetLetter] }}
           >
             {targetLetter}
           </span>
@@ -36,13 +48,15 @@ function HUD({ timeLeft, targetLetter, score, scoreBounce, onRepeat }) {
           aria-label="Repeat instruction"
           type="button"
         >
-          🔊
+          Repeat
         </button>
       </div>
 
       {/* Score */}
       <div className="hud-score" aria-live="polite">
-        <span className="hud-label">Score</span>
+        <span className="hud-label">Remaining</span>
+        <span className="hud-value">{remaining}</span>
+        <span className="hud-label" style={{ marginTop: 8 }}>Score</span>
         <span className={`hud-value${scoreBounce ? ' score-bounce' : ''}`}>
           {score}
         </span>

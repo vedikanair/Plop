@@ -27,6 +27,8 @@
   display: inline-block;
   padding: 2px 6px;
   border-radius: 8px;
+  background: rgba(26, 79, 160, 0.12);
+  border: 2px solid rgba(26, 79, 160, 0.20);
 }
 
 /* High score banner */
@@ -70,6 +72,34 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.ml-target-accuracy {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ml-target-accuracy-letter {
+  font-size: 2.2rem;
+  font-weight: 900;
+  background: rgba(26, 79, 160, 0.10);
+  border: 2px solid rgba(26, 79, 160, 0.18);
+  padding: 6px 12px;
+  border-radius: 14px;
+}
+
+.ml-target-accuracy-pct {
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.ml-confused-with {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--color-text);
 }
 
 .ml-accuracy-item {
