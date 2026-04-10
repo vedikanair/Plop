@@ -29,6 +29,7 @@ function App() {
     isBetweenLevels,
     startGame,
     nextLevel,
+    stopToStart,
     handleBubblePop,
     handleBubbleMissed,
     speakInstruction,
@@ -96,6 +97,10 @@ function App() {
         lettersThisLevel={lettersThisLevel}
         isBetweenLevels={isBetweenLevels}
         onNextLevel={nextLevel}
+        onGoDashboard={() => {
+          stopToStart();
+          setAppScreen('dashboard');
+        }}
         onBubblePop={handleBubblePop}
         onBubbleMissed={handleBubbleMissed}
         onRepeat={() => speakInstruction(targetLetter)}

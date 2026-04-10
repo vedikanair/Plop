@@ -27,8 +27,8 @@
   display: inline-block;
   padding: 2px 6px;
   border-radius: 8px;
-  background: rgba(26, 79, 160, 0.12);
-  border: 2px solid rgba(26, 79, 160, 0.20);
+  background: rgba(180, 205, 237, 0.28);
+  border: 2px solid rgba(52, 73, 102, 0.35);
 }
 
 /* High score banner */
@@ -53,16 +53,17 @@
 .ml-summary {
   width: 100%;
   max-width: 400px;
-  background: #F8F6F0;
-  border: 2px solid #E0E0E0;
+  background: #344966;
+  border: 2px solid rgba(180, 205, 237, 0.45);
   border-radius: 20px;
   padding: 20px 24px;
   text-align: center;
+  color: #F0F4EF;
 }
 
 .ml-tip {
   font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-  color: var(--color-text);
+  color: #F0F4EF;
   line-height: 1.5;
   margin-bottom: 16px;
 }
@@ -85,8 +86,8 @@
 .ml-target-accuracy-letter {
   font-size: 2.2rem;
   font-weight: 900;
-  background: rgba(26, 79, 160, 0.10);
-  border: 2px solid rgba(26, 79, 160, 0.18);
+  background: rgba(180, 205, 237, 0.22);
+  border: 2px solid rgba(180, 205, 237, 0.55);
   padding: 6px 12px;
   border-radius: 14px;
 }
@@ -99,7 +100,7 @@
 .ml-confused-with {
   margin-top: 12px;
   font-size: 1rem;
-  color: var(--color-text);
+  color: rgba(240, 244, 239, 0.92);
 }
 
 .ml-accuracy-item {
